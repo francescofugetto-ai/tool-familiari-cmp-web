@@ -1,0 +1,886 @@
+﻿<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Tool Screening familiari">
+<meta name="theme-color" content="#FAF9F7">
+<script data-iphone="sentinella">
+(function(){
+var h=document.documentElement, msg="";
+function ha(c){ return (" "+h.className+" ").indexOf(" "+c+" ")>=0; }
+// L'errore puo' arrivare prima che l'avviso esista — uno script in <head> che
+// non si lascia leggere —: il messaggio si tiene da parte e si scrive quando
+// la pagina c'e'.
+function scrivi(){
+  var e=document.getElementById("nmerr");
+  if(e&&msg) e.textContent="Errore del motore: "+msg;
+}
+function ko(m){
+  if(m&&!msg) msg=m;
+  if(!ha("motore-ko")) h.className+=" motore-ko";
+  scrivi();
+}
+h.className+=" js";
+window.onerror=function(m,src,riga,col){
+  m=String(m);
+  if(/^Script error\.?$/.test(m)) m="il browser non ne mostra il dettaglio (\u00abScript error.\u00bb)";
+  ko(m+(riga?" (riga "+riga+(col?", colonna "+col:"")+")":""));
+};
+document.addEventListener("DOMContentLoaded",function(){
+  if(!ha("motore-ok")) ko(msg||"il motore non ha completato l'avvio"); else scrivi();
+});
+})();
+</script>
+<title>Cardiomiopatie — lo screening dei familiari</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+  :root {
+    --bg:#FAF9F7; --surface:#FFFFFF; --surface-alt:#F3F2EF;
+    --border:rgba(11,11,11,0.10); --border-strong:rgba(11,11,11,0.18);
+    --text-primary:#0B0B0B; --text-secondary:#52514E; --text-muted:#76746F;
+    --accent-blue:#2A78D6;   --accent-blue-bg:#E6F1FB;   --accent-blue-border:#B5D4F4;
+    --accent-amber:#BA7517;  --accent-amber-bg:#FAEEDA;  --accent-amber-border:#FAC775;
+    --accent-red:#A32D2D;    --accent-red-bg:#FCEBEB;    --accent-red-border:#F7C1C1;
+    --accent-green:#3B6D11;  --accent-green-bg:#EAF3DE;  --accent-green-border:#C0DD97;
+    --cor-1:#3B8E5A; --cor-2a:#E0A82E; --cor-2b:#DE7E3C; --cor-3nb:#CE6D86; --cor-3:#B33A3A;
+    --k0:#2E7D4F; --k0-bg:#E2F3E8; --k0-bd:#A6D9B8;
+    --k1:#2A78D6; --k1-bg:#E3EFFB; --k1-bd:#A9CBF1;
+    --k2:#8A6A00; --k2-bg:#FBF3C8; --k2-bd:#EBD56C;
+    --k3:#B45309; --k3-bg:#FDEBD8; --k3-bd:#F4BD85;
+    --k4:#A32D2D; --k4-bg:#FCE3E3; --k4-bd:#F0A9A9;
+    --grid:rgba(42,120,214,.08);
+    --font:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    --display:'IBM Plex Sans Condensed','Arial Narrow',-apple-system,'Segoe UI',sans-serif;
+    --mono:'IBM Plex Mono',ui-monospace,Consolas,'Courier New',monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:#111418; --surface:#181C22; --surface-alt:#20252D;
+      --border:rgba(255,255,255,.10); --border-strong:rgba(255,255,255,.19);
+      --text-primary:#E7EAEE; --text-secondary:#B8BEC7; --text-muted:#949BA5;
+      --accent-blue:#72AAEE;   --accent-blue-bg:#18283A;   --accent-blue-border:#2E4B6C;
+      --accent-amber:#E3A94F;  --accent-amber-bg:#30250F;  --accent-amber-border:#5D4719;
+      --accent-red:#EF8E8E;    --accent-red-bg:#361B1B;    --accent-red-border:#6B3232;
+      --accent-green:#95C873;  --accent-green-bg:#1C2A13;  --accent-green-border:#3C5626;
+      --k0:#8FD3A8; --k0-bg:#132B1D; --k0-bd:#2D5A3E;
+      --k1:#8EC0F5; --k1-bg:#16283C; --k1-bd:#2F5378;
+      --k2:#EDD36A; --k2-bg:#2C260C; --k2-bd:#5E5120;
+      --k3:#F3B27A; --k3-bg:#33210F; --k3-bd:#6B4524;
+      --k4:#F29A9A; --k4-bg:#361B1B; --k4-bd:#6B3232;
+      --grid:rgba(114,170,238,.07);
+      color-scheme:dark;
+    }
+  }
+  body { font-family:var(--font); background:var(--bg); color:var(--text-primary); font-size:14.5px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  .page { max-width:960px; margin:0 auto; padding:0 16px 4rem; }
+  strong, b { font-weight:600; }
+  .muted { color:var(--text-muted); }
+  .hero { margin:0 -16px 0; padding:2.2rem 16px 1.3rem; border-bottom:1px solid var(--border);
+          background-color:var(--bg);
+          background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+          background-size:22px 22px; }
+  .kicker { font-family:var(--mono); font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--accent-blue); margin-bottom:8px; }
+  .headline { font-family:var(--display); font-size:30px; font-weight:700; line-height:1.12; margin-bottom:10px; }
+  .lede { font-size:14.5px; color:var(--text-secondary); max-width:760px; margin-bottom:12px; }
+  .lede strong { color:var(--text-primary); }
+  .meta-row { display:flex; flex-wrap:wrap; gap:6px 8px; font-size:12px; }
+  .meta-chip { background:var(--surface); border:1px solid var(--border-strong); border-radius:99px; padding:2px 10px; color:var(--text-secondary); overflow-wrap:anywhere; }
+  .meta-chip strong { color:var(--text-primary); }
+  .bar { position:-webkit-sticky;position:sticky; top:0; z-index:30; background:var(--bg); border-bottom:1px solid var(--border-strong);
+         margin:0 -16px 1.2rem; padding:8px 16px; display:flex; flex-wrap:wrap; align-items:center; gap:6px 10px; }
+  .bar .lbl { font-family:var(--mono); font-size:10.5px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--text-muted); }
+  .bar .sp { flex:1 1 auto; }
+  .btn { font:600 12.5px var(--font); padding:6px 13px; border-radius:99px; border:1px solid var(--border-strong); background:var(--surface); color:var(--text-secondary); cursor:pointer; }
+  .btn:hover { border-color:var(--accent-blue); color:var(--accent-blue); }
+  .stage { display:flex; align-items:baseline; gap:10px; margin:2rem 0 .7rem; padding-bottom:6px; border-bottom:2px solid var(--border-strong); }
+  .stage-n { font-family:var(--mono); font-size:12px; font-weight:600; color:#FFFFFF; background:var(--accent-blue); border-radius:6px; padding:1px 7px; }
+  .stage-t { font-family:var(--display); font-size:20px; font-weight:700; line-height:1.2; }
+  .stage-w { margin-left:auto; font-size:11.5px; color:var(--text-muted); text-align:right; }
+  .card { background:var(--surface); border:1px solid var(--border-strong); border-radius:12px; padding:14px 16px; margin-bottom:12px; }
+  .card h3 { font-size:13px; font-weight:600; letter-spacing:.02em; margin-bottom:8px; color:var(--text-secondary); }
+  .fl { font-size:12.5px; font-weight:600; color:var(--text-secondary); min-width:150px; }
+  .fl small { display:block; font-weight:400; color:var(--text-muted); font-size:11.5px; }
+  input[type=number] { font:500 15px var(--font); color:var(--text-primary); background:var(--surface); border:1px solid var(--border-strong); border-radius:8px; padding:6px 9px; width:92px; text-align:center; }
+  select { font:500 13.5px var(--font); color:var(--text-primary); background:var(--surface); border:1px solid var(--border-strong); border-radius:8px; padding:6px 8px; max-width:100%; }
+  .seg { display:inline-flex; flex-wrap:wrap; border:1px solid var(--border-strong); border-radius:10px; overflow:hidden; max-width:100%; }
+  .seg label { position:relative; cursor:pointer; }
+  .seg input { position:absolute; opacity:0; width:1px; height:1px; }
+  .seg span { display:block; padding:6px 12px; font-size:13.5px; font-weight:500; color:var(--text-secondary); border-right:1px solid var(--border); }
+  .seg label:last-child span { border-right:none; }
+  .seg input:checked + span { background:var(--text-primary); color:var(--bg); }
+  .seg input:focus-visible + span { outline:2px solid var(--accent-blue); outline-offset:-2px; }
+  .riga { display:flex; flex-wrap:wrap; align-items:center; gap:6px 12px; padding:7px 0; border-bottom:1px dashed var(--border); }
+  .riga:last-child { border-bottom:none; }
+  .riga .fl { min-width:0; flex:0 0 190px; }
+  .vv { font-family:var(--mono); font-size:12px; color:var(--text-muted); }
+  .hide { display:none !important; }
+  .esito { display:flex; flex-wrap:wrap; align-items:center; gap:10px 14px; margin-bottom:4px; }
+  .cat { display:inline-block; font-size:12.5px; font-weight:600; border-radius:99px; padding:2px 10px; border:1px solid; }
+  .k0 { color:var(--k0); background:var(--k0-bg); border-color:var(--k0-bd); }
+  .k1 { color:var(--k1); background:var(--k1-bg); border-color:var(--k1-bd); }
+  .k2 { color:var(--k2); background:var(--k2-bg); border-color:var(--k2-bd); }
+  .k3 { color:var(--k3); background:var(--k3-bg); border-color:var(--k3-bd); }
+  .k4 { color:var(--k4); background:var(--k4-bg); border-color:var(--k4-bd); }
+  .kx { color:var(--text-muted); background:var(--surface-alt); border-color:var(--border-strong); }
+  .big { font-family:var(--display); font-size:24px; font-weight:700; line-height:1.15; }
+  .cor { display:inline-block; font-family:var(--mono); font-size:11px; font-weight:600; color:#FFFFFF; border-radius:4px; padding:0 5px; margin:0 1px; white-space:nowrap; vertical-align:1px; }
+  .c1 { background:var(--cor-1); } .c2a { background:var(--cor-2a); color:#1D1602; } .c2b { background:var(--cor-2b); } .c3 { background:var(--cor-3); } .c3nb { background:var(--cor-3nb); }
+  .cor.loe { background:var(--surface-alt); color:var(--text-primary); border:1px solid var(--border-strong); }
+  .pg { font-family:var(--mono); font-size:11px; color:var(--text-muted); }
+  .prov { font-family:var(--mono); font-size:10px; font-weight:600; letter-spacing:.03em; border-radius:4px; padding:0 5px; white-space:nowrap; border:1px solid; }
+  .prov-sintesi { color:var(--k2); background:var(--k2-bg); border-color:var(--k2-bd); }
+  .prov-conf { color:var(--k1); background:var(--k1-bg); border-color:var(--k1-bd); }
+  .nota { border-left:3px solid var(--accent-amber); background:var(--accent-amber-bg); border-radius:0 8px 8px 0; padding:7px 11px; margin-top:8px; font-size:13.5px; }
+  .nota.info { border-left-color:var(--accent-blue); background:var(--accent-blue-bg); }
+  .nota.stop { border-left-color:var(--accent-red); background:var(--accent-red-bg); }
+  .nota.ok { border-left-color:var(--accent-green); background:var(--accent-green-bg); }
+  .nota.spenta { border-left-color:var(--border-strong); background:var(--surface-alt); color:var(--text-secondary); }
+  .nota strong { color:var(--text-primary); }
+  .passo { display:flex; gap:10px; padding:8px 0; border-bottom:1px dashed var(--border); }
+  .passo:last-child { border-bottom:none; }
+  .passo .ico { flex:0 0 26px; font-weight:700; text-align:center; font-family:var(--mono); font-size:13px; padding-top:1px; }
+  .passo .tx { flex:1 1 auto; font-size:14px; min-width:0; overflow-wrap:anywhere; }
+  .passo.att { background:var(--accent-blue-bg); border-radius:8px; border-bottom-color:transparent; padding:8px 8px; margin:2px -8px; }
+  .passo.att .ico { color:var(--accent-blue); }
+  .passo.esc .ico, .passo.esc .tx { color:var(--text-muted); }
+  .lista li { margin:4px 0 4px 18px; font-size:13.5px; }
+  .via { display:flex; flex-wrap:wrap; align-items:center; gap:4px 6px; font-size:13px; margin:2px 0 6px; }
+  .via .nodo { border:1px solid var(--border-strong); border-radius:7px; padding:1px 8px; background:var(--surface-alt); }
+  .via .nodo.ultimo { border-color:var(--accent-blue); background:var(--accent-blue-bg); font-weight:600; }
+  .via .fr { color:var(--text-muted); font-family:var(--mono); }
+  .tab { width:100%; border-collapse:collapse; font-size:13px; margin-top:4px; }
+  .tab th, .tab td { text-align:left; padding:5px 6px; border-bottom:1px solid var(--border); vertical-align:top; }
+  .tab th { font-size:11.5px; font-weight:600; color:var(--text-muted); text-transform:uppercase; letter-spacing:.04em; }
+  .tab tr.qui td { background:var(--accent-blue-bg); font-weight:600; }
+  .foot { margin-top:2.4rem; padding-top:1rem; border-top:1px solid var(--border-strong); font-size:12px; color:var(--text-muted); line-height:1.7; }
+  .foot strong { color:var(--text-secondary); }
+  @media (max-width:640px) {
+    .headline { font-size:25px; }
+    .stage-w { display:none; }
+    .riga .fl { flex:1 1 100%; }
+    .big { font-size:21px; }
+    .tab { font-size:12px; }
+    .page { overflow-wrap:anywhere; }
+  }
+  @media print { .bar { position:static; } }
+</style>
+<style data-iphone="stile">
+/* L'avviso e' visibile per costruzione: lo nasconde solo la classe che la
+   sentinella mette quando JavaScript esiste, e lo rimostra quando il motore
+   muore. Nell'anteprima dell'iPhone nessuna delle due arriva. */
+#nomotore{background:#FCEBEB;border:1.5px solid #A32D2D;border-radius:10px;
+ padding:12px 15px;margin:0 0 1.1rem;font-size:13.5px;line-height:1.6;color:#0B0B0B;
+ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif}
+#nomotore strong{display:block;color:#A32D2D;font-size:15px;margin-bottom:4px}
+#nomotore p{margin:6px 0 0}
+#nomotore a{color:#A32D2D}
+#nomotore .nmurl{font-family:'SFMono-Regular',Consolas,Menlo,monospace;font-size:.92em;word-break:break-all}
+#nomotore .nmerr{display:block;font-family:'SFMono-Regular',Consolas,Menlo,monospace;
+ font-size:11.5px;color:#A32D2D;margin-top:6px;word-break:break-word}
+#nomotore .nmerr:empty{display:none}
+html.js #nomotore{display:none}
+html.js.motore-ko #nomotore{display:block}
+
+#nmprivacy{background:#E2F4F5;border:1px solid #A7DBDE;border-radius:8px;padding:9px 13px;
+ margin:0 0 1rem;font-size:12.5px;line-height:1.55;color:#0B0B0B;
+ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif}
+@media print{#nmprivacy{display:none}}
+</style>
+</head>
+<body>
+<div class="nomotore" id="nomotore" role="alert">
+ <strong>Motore di calcolo non attivo</strong>
+ <p>I calcoli, i filtri e i comandi di questa pagina <b>non funzionano</b>: dove leggi «—» non c'è un
+ valore. Il testo resta leggibile, i numeri che dipendono dai tuoi dati no. Non usare questa pagina
+ per decidere una dose.</p>
+ <p>Su iPhone e iPad succede sempre con un file salvato sul telefono: si apre nell'<b>anteprima</b> —
+ dall'app File, da Mail, da WhatsApp —, che mostra la pagina ma non esegue il motore, e Apple non
+ permette di aprirlo in Safari. Sull'iPhone il tool funziona aperto da questo indirizzo, in Safari: <a class="nmurl" href="https://francescofugetto-ai.github.io/tool-familiari-cmp-web/">https://francescofugetto-ai.github.io/tool-familiari-cmp-web/</a> — poi Condividi, «Aggiungi alla schermata Home». Dopo la prima apertura funziona anche senza rete. Su computer e Android basta aprire il file.</p>
+ <span class="nmerr" id="nmerr"></span>
+</div>
+<div class="nmprivacy" id="nmprivacy">
+ <b>Quello che scrivi resta su questo dispositivo.</b> La pagina non invia niente in rete e non
+ salva niente: nessun dato esce da qui. Per la stessa ragione, <b>chiudendola il contenuto si
+ perde</b> — copia il referto dove ti serve prima di chiudere.
+</div>
+<div class="page">
+<header class="hero">
+  <div class="kicker">Strumento · Cardiomiopatie · ESC 2023</div>
+  <h1 class="headline">Lo screening dei familiari</h1>
+  <p class="lede"><strong>Come si usa.</strong> Si parte dal <strong>probando</strong> — il fenotipo e l'esito del suo test genetico — e si descrive <strong>un parente</strong> alla volta. Lo strumento percorre la <strong>Fig. 11</strong> e le Recommendation Table 8 e 14 della linea guida e dice <strong>se fare il test genetico</strong> al parente, <strong>che cosa controllare</strong>, <strong>ogni quanto</strong> e <strong>quando smettere</strong>, con la classe e la pagina accanto a ogni indicazione. Vale anche nel <strong>bambino</strong>: la fonte tratta bambino e adulto come la stessa malattia. <strong>Non dà dosi</strong> e non stabilisce il fenotipo: quello lo dicono gli esami. <strong>Azzera</strong>, in alto, ricomincia.</p>
+  <div class="meta-row">
+    <span class="meta-chip"><strong>Fonte</strong> 2023 ESC Guidelines for the management of cardiomyopathies</span>
+    <span class="meta-chip"><strong>Calcolo</strong> Fig. 11, p. 3547 · Rec. Table 8, p. 3537 · Rec. Table 14, p. 3546 · § 6.11, pp. 3546–3548 · Rec. Table 5, p. 3526</span>
+    <span class="meta-chip"><strong>Confronto</strong> AHA/ACC 2024 HCM (Tab. 7, p. e1252; pp. e1260, e1263) · ESC 2022 aritmie ventricolari</span>
+  </div>
+</header>
+
+<div class="bar" id="bar" aria-live="polite">
+  <span class="lbl">Test</span> <span id="barTest" class="cat kx">—</span>
+  <span class="lbl">Controlli</span> <span id="barCtrl" class="cat kx">—</span>
+  <span class="lbl">Fine</span> <span id="barFine" class="cat kx">—</span>
+  <span class="sp"></span>
+  <button class="btn" id="azzera" type="button">Azzera</button>
+</div>
+
+<div class="stage"><span class="stage-n">1</span><span class="stage-t">Il probando</span><span class="stage-w">Fig. 11, p. 3547 · Rec. Table 8, p. 3537</span></div>
+<div class="card">
+  <div class="riga"><span class="fl">Fenotipo del probando</span>
+    <span class="seg">
+      <label><input type="radio" name="fen" value="hcm"><span>HCM</span></label>
+      <label><input type="radio" name="fen" value="dcm"><span>DCM</span></label>
+      <label><input type="radio" name="fen" value="ndlvc"><span>NDLVC</span></label>
+      <label><input type="radio" name="fen" value="arvc"><span>ARVC</span></label>
+      <label><input type="radio" name="fen" value="rcm"><span>RCM</span></label>
+      <label><input type="radio" name="fen" value="altro"><span>altro</span></label>
+    </span></div>
+  <div class="riga"><span class="fl">Test genetico nel probando<small>la classe della variante la dà il laboratorio</small></span>
+    <span class="seg">
+      <label><input type="radio" name="test" value="plp"><span>variante P/LP</span></label>
+      <label><input type="radio" name="test" value="vus"><span>VUS</span></label>
+      <label><input type="radio" name="test" value="neg"><span>nessuna variante</span></label>
+      <label><input type="radio" name="test" value="nonfatto"><span>non fatto</span></label>
+    </span></div>
+  <div class="riga hide" id="rigaGene"><span class="fl">Gene della variante<small>conta nella DCM, p. 3564</small></span>
+    <select id="gene">
+      <option value="">— non indicato —</option>
+      <option value="LMNA">LMNA</option>
+      <option value="EMD">EMD</option>
+      <option value="DES">DES</option>
+      <option value="FLNC">FLNC</option>
+      <option value="DSP">DSP</option>
+      <option value="PLN">PLN</option>
+      <option value="TMEM43">TMEM43</option>
+      <option value="RBM20">RBM20</option>
+      <option value="altro">un altro gene</option>
+    </select></div>
+  <div class="riga"><span class="fl">Ereditarietà<small>§ 6.11.1, pp. 3547–3548</small></span>
+    <select id="ered">
+      <option value="ad">autosomica dominante, o non nota</option>
+      <option value="ar">autosomica recessiva certa</option>
+      <option value="x">legata all'X</option>
+      <option value="poli">più di una variante P/LP in famiglia</option>
+    </select></div>
+  <div class="riga"><span class="fl">Altri malati in famiglia<small>oltre al probando</small></span>
+    <span class="seg">
+      <label><input type="radio" name="altri" value="si"><span>sì</span></label>
+      <label><input type="radio" name="altri" value="no"><span>no, solo il probando</span></label>
+      <label><input type="radio" name="altri" value="nonnoto"><span>non noto</span></label>
+    </span></div>
+  <div class="riga hide" id="rigaInform"><span class="fl">Famiglia informativa<small>albero abbastanza ampio da dire che il probando è l'unico malato</small></span>
+    <span class="seg">
+      <label><input type="radio" name="inform" value="si"><span>sì</span></label>
+      <label><input type="radio" name="inform" value="no"><span>no, o non so</span></label>
+    </span></div>
+</div>
+
+<div class="stage"><span class="stage-n">2</span><span class="stage-t">Il parente</span><span class="stage-w">Rec. Table 8, p. 3537 · Rec. Table 14, p. 3546</span></div>
+<div class="card">
+  <div class="riga"><span class="fl">Grado di parentela<small>col probando</small></span>
+    <span class="seg">
+      <label><input type="radio" name="grado" value="1"><span>primo grado</span></label>
+      <label><input type="radio" name="grado" value="2"><span>secondo grado o oltre</span></label>
+    </span></div>
+  <div class="riga hide" id="rigaChi"><span class="fl">Chi è</span>
+    <span class="seg">
+      <label><input type="radio" name="chi" value="genitore"><span>genitore</span></label>
+      <label><input type="radio" name="chi" value="fratello"><span>fratello o sorella</span></label>
+      <label><input type="radio" name="chi" value="figlio"><span>figlio o figlia</span></label>
+    </span></div>
+  <div class="riga hide" id="rigaPonte"><span class="fl">Il parente di primo grado che li collega<small>il genitore, il figlio o il fratello del probando da cui passa la parentela</small></span>
+    <span class="seg">
+      <label><input type="radio" name="ponte" value="morto"><span>è morto</span></label>
+      <label><input type="radio" name="ponte" value="portatore"><span>porta la variante</span></label>
+      <label><input type="radio" name="ponte" value="nonportatore"><span>non la porta</span></label>
+      <label><input type="radio" name="ponte" value="nontestato"><span>non testato o non disponibile</span></label>
+    </span></div>
+  <div class="riga"><span class="fl">Età<small>anni compiuti</small></span><input type="number" id="eta" min="0" max="110" step="1" inputmode="numeric" placeholder="—"><span class="vv" id="vEta">—</span></div>
+  <div class="riga"><span class="fl">Sesso</span>
+    <span class="seg">
+      <label><input type="radio" name="sesso" value="f"><span>donna</span></label>
+      <label><input type="radio" name="sesso" value="m"><span>uomo</span></label>
+    </span></div>
+</div>
+
+<div class="stage"><span class="stage-n">3</span><span class="stage-t">Che cosa si sa del parente</span><span class="stage-w">Fig. 11, p. 3547 · Fig. 9, p. 3535</span></div>
+<div class="card">
+  <div class="riga hide" id="rigaCasc"><span class="fl">Il suo test a cascata<small>la variante P/LP di famiglia</small></span>
+    <span class="seg">
+      <label><input type="radio" name="casc" value="pos"><span>porta la variante</span></label>
+      <label><input type="radio" name="casc" value="neg"><span>non la porta</span></label>
+      <label><input type="radio" name="casc" value="nonfatto"><span>non ancora fatto</span></label>
+      <label><input type="radio" name="casc" value="rifiuta"><span>rifiutato</span></label>
+    </span></div>
+  <div class="riga"><span class="fl">Il suo fenotipo<small>visita, ECG, imaging</small></span>
+    <span class="seg">
+      <label><input type="radio" name="fenp" value="nonval"><span>non ancora valutato</span></label>
+      <label><input type="radio" name="fenp" value="normale"><span>ECG e imaging normali</span></label>
+      <label><input type="radio" name="fenp" value="dubbio"><span>anomalie non diagnostiche</span></label>
+      <label><input type="radio" name="fenp" value="cmp"><span>cardiomiopatia</span></label>
+    </span></div>
+  <div class="nota info" id="notaFenp" style="margin-top:10px">—</div>
+</div>
+
+<div class="stage"><span class="stage-n">4</span><span class="stage-t">Che cosa fare</span><span class="stage-w">Fig. 11 · Rec. Table 8 e 14 · § 6.11</span></div>
+<div class="card" id="outPercorso"></div>
+<div class="card" id="outTest"></div>
+<div class="card" id="outScreen"></div>
+<div class="card" id="outFine"></div>
+
+<div class="card"><h3>Confronto con altre linee guida, nel loro sistema di classi</h3><div id="outConf"></div></div>
+<div class="card"><h3>Incoerenze e ambiguità della fonte</h3><div id="outInc"></div></div>
+<div class="card"><h3>Limiti per questo parente</h3><ul class="lista" id="limiti"></ul></div>
+
+<div class="foot">
+  <strong>Fonte.</strong> Arbelo E, Protonotarios A, Gimeno JR, et al. 2023 ESC Guidelines for the management of cardiomyopathies. <em>Eur Heart J</em> 2023;44:3503–3626, doi:10.1093/eurheartj/ehad194 — test genetico e consulenza (§ 6.8, p. 3529; Rec. Table 8, p. 3537; Fig. 9, p. 3535), screening e follow-up dei familiari (§ 6.11 e 6.11.1, pp. 3546–3548; Rec. Table 14, p. 3546; Fig. 11, p. 3547), CMR nei familiari (Rec. Table 5, p. 3526), follow-up del paziente (Rec. Table 13, p. 3546), supporto psicologico (Rec. Table 15, p. 3549), il parente per fenotipo (HCM p. 3549, DCM pp. 3562 e 3564, NDLVC pp. 3566–3567, ARVC pp. 3569–3570); supplementare, § 2.2.5, p. 5.<br>
+  <strong>Confronto.</strong> Ommen SR, Ho CY, Asif IM, et al. 2024 AHA/AMSSM/ASE/ACC/HRS/PACES/SCMR Guideline for the Management of Hypertrophic Cardiomyopathy. <em>Circulation</em> 2024;149:e1239–e1311, doi:10.1161/CIR.0000000000001250 — Tab. 7, p. e1252; raccomandazioni pp. e1260 e e1263; testo p. e1264. Zeppenfeld K, Tfelt-Hansen J, de Riva M, et al. 2022 ESC Guidelines for the management of patients with ventricular arrhythmias and the prevention of sudden cardiac death. <em>Eur Heart J</em> 2022;43:3997–4126, doi:10.1093/eurheartj/ehac262 — Rec. Table 2, p. 4018; pp. 4058 e 4063. Ogni classe mostrata porta la pagina, nel sistema della sua linea guida.<br><br>
+  Strumento personale di studio e consultazione: <strong>non sostituisce il giudizio clinico né la consulenza genetica</strong>. Non calcola dosi. Non salva i dati e non li invia in rete.
+</div>
+</div>
+<script>
+(function () {
+  "use strict";
+
+  /* ═══ DATI ═══════════════════════════════════════════════════════════════
+     2023 ESC Guidelines for the management of cardiomyopathies (ESC 2023).
+     Rec. Table 8, p. 3537 — consulenza genetica alle famiglie, anche senza
+       test, I B; test a cascata con consulenza prima e dopo ai parenti ADULTI
+       a rischio con una variante P/LP certa in famiglia I B, ai parenti in
+       ETA' PEDIATRICA IIa B (pesando cardiomiopatia, eta' attesa di esordio,
+       presentazione in famiglia, conseguenze cliniche e legali), sempre
+       a partire dai parenti di primo grado, se disponibili, e poi per gradi; VUS cercata nei genitori o nei parenti malati per la
+       segregazione IIa C; test diagnostico nel parente senza fenotipo senza
+       una P/LP in famiglia III C; test nel probando quando serve a diagnosi,
+       prognosi, terapia, riproduzione o apre la cascata I B; nel deceduto con
+       cardiomiopatia all'autopsia I C.
+     p. 3529 — niente cascata con una VUS nel probando; la segregazione non e'
+       un test diagnostico per chi la fa. p. 3534 — un test negativo non dice
+       che la malattia non sia genetica.
+     Rec. Table 14, p. 3546 — dopo la cascata: portatore di primo grado,
+       valutazione multiparametrica con ECG e imaging e follow-up a lungo
+       termine I B; non portatore SENZA fenotipo, dimissione con l'invito a
+       tornare I C; senza P/LP nel probando o senza test: prima valutazione con
+       ECG e imaging I C, controlli regolari a lungo termine IIa C; parente di
+       primo grado morto: valutazione dei parenti di secondo grado IIa C.
+     § 6.11, p. 3546 — senza variante nota: bambini in sorveglianza continua;
+       adulti secondo storia familiare e altri fattori; un solo malato e
+       nessuna variante: frequenza e durata riducibili.
+     p. 3547 — portatori e malattia familiare dimostrata: dall'infanzia alla vecchiaia, ECG ed eco ogni 1–3 anni prima dei 60, poi ogni 3–5; penetranza
+       nelle donne spostata di 10 anni; numeri validi per le famiglie malate.
+     § 6.11.1, pp. 3547–3548 — forma isolata (test negativo nel probando,
+       famiglia informativa): stop considerabile nei parenti di primo grado
+       >=50 anni con esami normali; recessiva certa: l'eterozigote si puo'
+       dimettere; legata all'X: l'eterozigote puo' rimandare la valutazione;
+       piu' varianti patogene: si discute nel team.
+     Fig. 11, p. 3547 — il percorso; nota a: senza altri malati e senza
+       variante, stop anticipato da considerare. Fig. 9, p. 3535 — bambino:
+       se la famiglia rifiuta la cascata, lo screening clinico continua.
+     Rec. Table 5, p. 3526 — CMR con contrasto nel portatore senza fenotipo
+       IIa B; nella cardiomiopatia familiare senza diagnosi genetica IIb C.
+     Rec. Table 13, p. 3546 — paziente stabile: ECG ed eco ogni 1–2 anni I C.
+     Rec. Table 15, p. 3549 — supporto psicologico dopo la morte improvvisa
+       prematura di un familiare con cardiomiopatia I B.
+     ARVC, p. 3570 — parenti a rischio: ogni 1–2 anni ECG, eco, Holter; CMR
+       alla prima valutazione. DCM, p. 3564 — conduzione e aritmie con LMNA,
+       EMD, DES; CMR con funzione normale con FLNC, DES, DSP, PLN, LMNA,
+       TMEM43, «RMB20»; senza altri malati oltre al probando, i parenti di
+       primo grado seguono gli stessi intervalli per eta' del § 6.11 (contro
+       la riduzione di p. 3546: incoerenza dichiarata). NDLVC, p. 3567 — conduzione e aritmie; valutazione a
+       lungo termine dei parenti di primo grado.
+     Supplementare ESC 2023, § 2.2.5, p. 5 — la cascata prosegue in tutti i
+       figli dei parenti portatori.
+     Il parente per fenotipo: HCM p. 3549; DCM p. 3562; NDLVC p. 3566;
+       ARVC p. 3569.
+     CONFRONTO — AHA/ACC 2024 HCM: p. e1260 n. 6 (1 B-NR), n. 11 (2b B-NR),
+       n. 12 e n. 13 (3: No Benefit B-NR); p. e1263 n. 1 (1 B-NR); Tab. 7,
+       p. e1252; testo p. e1264. ESC 2022 aritmie ventricolari: Rec. Table 2,
+       p. 4018; DCM p. 4058; HCM p. 4063. */
+  var ADULTO = 18;      // convenzione dello strumento: la fonte non fissa il confine fra eta' pediatrica e adulta
+  var SOGLIA_INT = 60;  // p. 3547: ogni 1–3 anni prima dei 60 anni, poi ogni 3–5
+  var STOP = 50;        // p. 3547, § 6.11.1: dai 50 anni, con esami cardiaci normali
+  var ETA_MAX = 110;
+  var INT = { prima:"1–3", dopo:"3–5", arvc:"1–2", paz:"1–2" }; // p. 3547; p. 3570; Rec. Table 13, p. 3546
+  var R = {
+    couns: { c:"I",   l:"B", p:"Rec. Table 8, p. 3537" },
+    cascA: { c:"I",   l:"B", p:"Rec. Table 8, p. 3537" },
+    cascP: { c:"IIa", l:"B", p:"Rec. Table 8, p. 3537" },
+    segr:  { c:"IIa", l:"C", p:"Rec. Table 8, p. 3537" },
+    noTest:{ c:"III", l:"C", p:"Rec. Table 8, p. 3537" },
+    prob:  { c:"I",   l:"B", p:"Rec. Table 8, p. 3537" },
+    autop: { c:"I",   l:"C", p:"Rec. Table 8, p. 3537" },
+    port:  { c:"I",   l:"B", p:"Rec. Table 14, p. 3546" },
+    dimis: { c:"I",   l:"C", p:"Rec. Table 14, p. 3546" },
+    iniz:  { c:"I",   l:"C", p:"Rec. Table 14, p. 3546" },
+    regol: { c:"IIa", l:"C", p:"Rec. Table 14, p. 3546" },
+    sec:   { c:"IIa", l:"C", p:"Rec. Table 14, p. 3546" },
+    cmrP:  { c:"IIa", l:"B", p:"Rec. Table 5, p. 3526" },
+    cmrF:  { c:"IIb", l:"C", p:"Rec. Table 5, p. 3526" },
+    paz:   { c:"I",   l:"C", p:"Rec. Table 13, p. 3546" },
+    lutto: { c:"I",   l:"B", p:"Rec. Table 15, p. 3549" }
+  };
+  var AHA = {
+    n6:  { c:"1",             l:"B-NR", p:"AHA/ACC 2024, p. e1260, n. 6" },
+    n11: { c:"2b",            l:"B-NR", p:"AHA/ACC 2024, p. e1260, n. 11" },
+    n12: { c:"3: No Benefit", l:"B-NR", p:"AHA/ACC 2024, p. e1260, n. 12" },
+    n13: { c:"3: No Benefit", l:"B-NR", p:"AHA/ACC 2024, p. e1260, n. 13" },
+    gpn: { c:"1",             l:"B-NR", p:"AHA/ACC 2024, p. e1263, n. 1" }
+  };
+  var E22 = {
+    casc: { c:"I",   l:"C", p:"ESC 2022, Rec. Table 2, p. 4018" },
+    team: { c:"I",   l:"C", p:"ESC 2022, Rec. Table 2, p. 4018" },
+    segr: { c:"I",   l:"C", p:"ESC 2022, Rec. Table 2, p. 4018" },
+    noidx:{ c:"III", l:"C", p:"ESC 2022, Rec. Table 2, p. 4018" },
+    hcm:  { c:"I",   l:"C", p:"ESC 2022, p. 4063" },
+    dcm1: { c:"I",   l:"C", p:"ESC 2022, p. 4058" },
+    dcm2b:{ c:"IIb", l:"C", p:"ESC 2022, p. 4058" }
+  };
+  var GENI_COND = ["LMNA", "EMD", "DES"];                                  // p. 3564
+  var GENI_CMR = ["FLNC", "DES", "DSP", "PLN", "LMNA", "TMEM43", "RBM20"];  // p. 3564 («RMB20» nella fonte)
+
+  /* ═══ FUNZIONI PURE ═══════════════════════════════════════════════════ */
+  function etaOk(e) { return e !== null && e >= 0 && e <= ETA_MAX; }
+  function ped(e) { return e < ADULTO; }
+  function dentro(a, x) { for (var i = 0; i < a.length; i++) if (a[i] === x) return true; return false; }
+
+  function manca(s) {
+    if (!s.fen) return "serve il fenotipo del probando (passo 1)";
+    if (!s.test) return "serve l'esito del test genetico nel probando (passo 1)";
+    if (!s.grado) return "serve il grado di parentela (passo 2)";
+    if (s.grado === "2" && !s.ponte) return "serve sapere chi è il parente di primo grado che lo collega al probando (passo 2)";
+    if (s.eta === null) return "serve l'età del parente (passo 2)";
+    if (!etaOk(s.eta)) return "età fuori scala (0–110 anni): non la uso";
+    return "";
+  }
+
+  // In quale ramo della Fig. 11 cade il parente.
+  function ramo(s) {
+    if (manca(s)) return null;
+    if (s.test === "plp") {
+      if (s.grado === "2" && s.ponte === "nonportatore") return "plp_fuori";
+      if (s.casc === "pos") return "plp_port";
+      if (s.casc === "neg") return "plp_neg";
+      if (s.casc === "nonfatto" || s.casc === "rifiuta") return "plp_ignoto";
+      return "plp_attesa";
+    }
+    if (s.grado === "2" && s.ponte !== "morto") return "noplp_fuori";
+    return "noplp";
+  }
+
+  function intervallo(s) {
+    if (s.fen === "arvc") return { tipo:"arvc", bar:"ogni " + INT.arvc + " anni" };
+    if (s.eta < SOGLIA_INT) return { tipo:"prima", bar:"ogni " + INT.prima + " anni" };
+    return { tipo:"dopo", bar:"ogni " + INT.dopo + " anni" };
+  }
+
+  // Il test genetico nel parente.
+  function testGen(s) {
+    var o = { voce:null, classe:null, bar:"—", k:"kx" };
+    var m = manca(s);
+    if (m) { o.perche = m; return o; }
+    var r = ramo(s);
+    if (s.test === "plp") {
+      if (r === "plp_fuori") { o.voce = "fuori"; o.bar = "fuori dalla cascata"; o.k = "k0"; return o; }
+      o.voce = "cascata"; o.classe = ped(s.eta) ? R.cascP : R.cascA;
+      o.bar = "cascata · " + o.classe.c + " " + o.classe.l; o.k = "k1";
+      if (s.casc === "pos") o.bar = "fatto: porta la variante";
+      if (s.casc === "neg") o.bar = "fatto: non la porta";
+      return o;
+    }
+    if (s.fenp === "cmp") {
+      if (s.test === "vus") { o.voce = "segregazione"; o.classe = R.segr; o.bar = "segregazione · IIa C"; o.k = "k2"; o.malato = true; return o; }
+      o.voce = "paziente"; o.classe = R.prob; o.bar = "come paziente"; o.k = "k3"; return o;
+    }
+    if (s.fenp === "dubbio") { o.voce = "dubbio"; o.bar = "da decidere nel team"; o.k = "k2"; return o; }
+    if (s.test === "vus" && s.grado === "1" && s.chi === "genitore") { o.voce = "segregazione"; o.classe = R.segr; o.bar = "segregazione · IIa C"; o.k = "k2"; return o; }
+    o.voce = "no"; o.classe = R.noTest; o.bar = "non indicato · III C"; o.k = "k4";
+    return o;
+  }
+
+  // Lo screening clinico: che cosa e ogni quanto.
+  function screen(s) {
+    var o = { stato:null, bar:"—", k:"kx" };
+    var m = manca(s);
+    if (m) { o.perche = m; return o; }
+    var r = ramo(s);
+    o.ramo = r;
+    if (r === "plp_attesa") { o.perche = "serve l'esito del test a cascata del parente (passo 3)"; return o; }
+    if (r === "plp_fuori") { o.stato = "fuori"; o.bar = "non previsti"; o.k = "k0"; return o; }
+    if (r === "noplp_fuori") { o.stato = "nonprevisto"; o.bar = "nessuna raccomandazione"; o.k = "kx"; return o; }
+    if (s.fenp === "cmp") { o.stato = "paziente"; o.bar = "da paziente, ogni " + INT.paz + " anni"; o.k = "k4"; return o; }
+    if (r === "plp_neg") {
+      if (s.fenp === "normale") { o.stato = "dimissione"; o.bar = "dimissione · I C"; o.k = "k0"; return o; }
+      if (s.fenp === "dubbio") { o.stato = "team"; o.bar = "da decidere nel team"; o.k = "k2"; return o; }
+      o.stato = "valuta"; o.bar = "ECG e imaging, poi dimissione"; o.k = "k1"; return o;
+    }
+    if (r === "plp_port") {
+      if (s.ered === "ar") { o.stato = "eteroAR"; o.bar = "dimissione possibile"; o.k = "k0"; return o; }
+      o.stato = "portatore"; o.iv = intervallo(s); o.bar = o.iv.bar; o.k = "k3";
+      o.rimandaX = s.ered === "x" && s.sesso === "f";
+      return o;
+    }
+    if (r === "plp_ignoto") { o.stato = "ignoto"; o.iv = intervallo(s); o.bar = o.iv.bar; o.k = "k3"; return o; }
+    o.stato = "noplp";
+    // DCM, p. 3564: anche senza altri malati oltre al probando, i parenti di primo grado seguono gli intervalli per eta' del § 6.11
+    if (s.fen === "arvc" || s.fen === "dcm" || s.altri === "si") { o.iv = intervallo(s); o.bar = o.iv.bar; o.k = "k2"; o.familiare = s.altri === "si"; o.dcm = s.fen === "dcm" && s.altri !== "si"; return o; }
+    if (s.altri === "no") { o.bar = "regolari, riducibili"; o.k = "k2"; o.isolata = true; return o; }
+    o.bar = "regolari"; o.k = "k2";
+    return o;
+  }
+
+  // Quando smettere.
+  function fine(s) {
+    var o = { tipo:null, bar:"—", k:"kx", cond:[] };
+    var m = manca(s);
+    if (m) { o.perche = m; return o; }
+    var sc = screen(s);
+    if (sc.perche) { o.perche = sc.perche; return o; }
+    var mappa = {
+      fuori:["nonsi", "non si applica", "kx"], nonprevisto:["nonsi", "non si applica", "kx"],
+      paziente:["paziente", "mai: è un paziente", "k4"], dimissione:["subito", "subito: dimissione", "k0"],
+      valuta:["dopoval", "dopo una valutazione normale", "k1"], team:["team", "da decidere nel team", "k2"],
+      eteroAR:["ar", "si può dimettere", "k0"], portatore:["mai", "mai: tutta la vita", "k4"],
+      ignoto:["ignoto", "quando il test lo dirà", "k3"]
+    };
+    if (mappa[sc.stato]) { o.tipo = mappa[sc.stato][0]; o.bar = mappa[sc.stato][1]; o.k = mappa[sc.stato][2]; return o; }
+    // senza P/LP: lo stop della forma isolata, § 6.11.1, p. 3547
+    o.cond = [
+      { ok:s.test === "neg", t:"test genetico negativo nel probando" },
+      { ok:s.altri === "no", t:"nessun altro malato in famiglia" },
+      { ok:s.inform === "si", t:"famiglia informativa" },
+      { ok:s.grado === "1", t:"parente di primo grado" },
+      { ok:s.fenp === "normale", t:"ECG e imaging del parente normali" },
+      { ok:s.eta >= STOP, t:"almeno " + STOP + " anni" }
+    ];
+    var tutti = true, quasi = true, i;
+    for (i = 0; i < o.cond.length; i++) if (!o.cond[i].ok) { tutti = false; if (i < o.cond.length - 1) quasi = false; }
+    if (tutti) { o.tipo = "stop"; o.bar = "stop considerabile"; o.k = "k0"; return o; }
+    if (quasi) { o.tipo = "stopdopo"; o.bar = "stop considerabile dai " + STOP + " anni"; o.k = "k1"; o.anni = STOP - s.eta; return o; }
+    o.tipo = "continua"; o.bar = "nessuno stop previsto"; o.k = "k2";
+    return o;
+  }
+
+  // I nodi della Fig. 11 attraversati, con la classe che la figura scrive.
+  function percorso(s) {
+    var v = [];
+    if (!s.test) return v;
+    v.push("Test genetico nel probando");
+    if (s.test === "plp") {
+      v.push("Variante P/LP");
+      v.push("Test a cascata, clinico e genetico (Classe I nella figura)");
+      if (s.grado === "2" && s.ponte === "nonportatore") { v.push("Ramo di un non portatore: fuori dalla cascata (lettura dello strumento)"); return v; }
+      if (s.casc === "pos") { v.push("Variante presente, con o senza fenotipo"); v.push(s.ered === "ar" ? "Eterozigote di una forma recessiva: dimissione possibile (§ 6.11.1)" : "Follow-up a lungo termine (Classe I)"); }
+      else if (s.casc === "neg") { v.push("Variante assente"); v.push(s.fenp === "cmp" ? "Ha una cardiomiopatia: la figura non ha questo ramo" : (s.fenp === "dubbio" ? "Dimissione (Classe I) nella figura; con anomalie non diagnostiche decide il team (lettura dello strumento)" : "Dimissione (Classe I)")); }
+      else if (s.casc === "nonfatto" || s.casc === "rifiuta") { v.push("Stato della variante non noto"); v.push("Lo screening clinico continua (Fig. 9)"); }
+      return v;
+    }
+    if (s.test === "vus") { v.push("VUS"); v.push("Segregazione e studi funzionali, dove si può"); v.push("Finché resta VUS: screening clinico a cascata (Classe I)"); }
+    else { v.push(s.test === "neg" ? "Nessuna variante" : "Test non fatto"); v.push("Riconsiderare altre cause"); v.push("Screening clinico a cascata (Classe I)"); }
+    if (s.fenp === "cmp") v.push("Cardiomiopatia: follow-up a lungo termine (Classe I)");
+    else if (s.fenp === "normale") v.push("Cuore normale: screening ripetuto a intervalli regolari (Classe IIa), e si torna allo screening");
+    else if (s.fenp === "dubbio") v.push("Anomalie non diagnostiche: la figura non ha questo ramo");
+    return v;
+  }
+
+  // Lo stesso parente letto con la AHA/ACC 2024 (HCM): Tab. 7, p. e1252.
+  function ahaTab7(s) {
+    if (s.eta === null || !etaOk(s.eta)) return null;
+    if (!ped(s.eta)) return { riga:"adulti", inizio:"quando si diagnostica la HCM nel familiare", ogni:"3–5" };
+    if (s.test === "plp") return { riga:"bambini e adolescenti di famiglie con genotipo positivo", inizio:"quando si diagnostica la HCM nel familiare", ogni:"1–2" };
+    return { riga:"tutti gli altri bambini e adolescenti", inizio:"in qualunque momento dopo la diagnosi nel familiare, non oltre la pubertà", ogni:"2–3", precoce:true };
+  }
+
+  /* ═══ STATO E DISEGNO ═════════════════════════════════════════════════ */
+  function el(id) { return document.getElementById(id); }
+  function radio(n) { var e = document.querySelector('input[name="' + n + '"]:checked'); return e ? e.value : ""; }
+  function num(id) { var v = el(id).value; if (v === "") return null; var n = parseFloat(String(v).replace(",", ".")); return isNaN(n) ? null : n; }
+
+  function S() {
+    var s = { fen:radio("fen"), test:radio("test"), altri:radio("altri"), grado:radio("grado"), sesso:radio("sesso"), fenp:radio("fenp"), eta:num("eta"), ered:el("ered").value || "ad" };
+    s.gene = (s.fen === "dcm" && s.test === "plp") ? el("gene").value : "";
+    s.inform = (s.test !== "plp" && s.altri === "no") ? radio("inform") : "";
+    s.chi = s.grado === "1" ? radio("chi") : "";
+    s.ponte = s.grado === "2" ? radio("ponte") : "";
+    s.casc = (s.test === "plp" && !(s.grado === "2" && s.ponte === "nonportatore")) ? radio("casc") : "";
+    return s;
+  }
+
+  function pgs(p) { return ' <span class="pg">' + p + "</span>"; }
+  function pill(r) {
+    var k = { "I":"c1", "IIa":"c2a", "IIb":"c2b", "III":"c3" }[r.c];
+    return '<span class="cor ' + k + '">' + r.c + '</span> <span class="cor loe">' + r.l + "</span>";
+  }
+  function pillE(r) { return pill(r) + pgs("ESC 2023, " + r.p); }
+  function pillA(r) {
+    var k = { "1":"c1", "2a":"c2a", "2b":"c2b", "3: No Benefit":"c3nb", "3: Harm":"c3" }[r.c];
+    return '<span class="cor ' + k + '">' + r.c + '</span> <span class="cor loe">' + r.l + "</span>" + pgs(r.p);
+  }
+  function pill22(r) { return pill(r) + pgs(r.p); }
+  function nota(g, t) { return '<div class="nota ' + (g || "") + '">' + t + "</div>"; }
+  function chip(k, t) { return '<span class="cat ' + k + '">' + t + "</span>"; }
+  function passo(t, cls, ico) { return '<div class="passo' + (cls ? " " + cls : "") + '"><span class="ico">' + (ico || "·") + '</span><span class="tx">' + t + "</span></div>"; }
+  var SINT = '<span class="prov prov-sintesi">SINTESI</span> ';
+  var CONF = '<span class="prov prov-conf">CONFRONTO</span> ';
+  var E = function (p) { return pgs("ESC 2023, " + p); };
+
+  var FENP = {
+    hcm: "<b>HCM.</b> Nel parente adulto di primo grado di un malato certo la diagnosi si fa con uno spessore parietale <b>≥13 mm</b> (nel probando adulto la soglia è 15 mm); nel bambino con z-score sotto 2, anomalie morfologiche o dell'ECG fanno sospettare la malattia ma da sole non bastano" + E("p. 3549") + ".",
+    dcm: "<b>DCM.</b> Nel parente le anomalie lievi e non diagnostiche sono frequenti e si sovrappongono alla normalità, all'ipertensione o all'obesità; una dilatazione isolata del VS con funzione sistolica conservata basta per la diagnosi (vedi le ambiguità della fonte); altre anomalie dell'ECG o dell'imaging, in una famiglia con DCM, fanno sospettare la malattia e chiedono un follow-up ravvicinato" + E("p. 3562") + ".",
+    ndlvc: "<b>NDLVC.</b> Nel parente di primo grado una disfunzione sistolica del VS, globale o regionale, o anomalie dell'ECG — della ripolarizzazione, bassi voltaggi del QRS, extrasistoli ventricolari frequenti (oltre 500 nelle 24 h), TVNS — sono molto suggestive e chiedono un follow-up ravvicinato" + E("p. 3566") + ".",
+    arvc: "<b>ARVC.</b> Nel parente di primo grado una disfunzione sistolica del VD, globale o regionale, o anomalie dell'ECG — della ripolarizzazione, durata dell'attivazione terminale prolungata, bassi voltaggi del QRS, extrasistoli ventricolari frequenti (oltre 500 nelle 24 h), TVNS — sono molto suggestive e chiedono un follow-up ravvicinato" + E("p. 3569") + ".",
+    rcm: "<b>RCM.</b> La fonte non dà criteri propri per il parente: valgono quelli del fenotipo.",
+    altro: "La fonte dà criteri propri per il parente solo per HCM, DCM, NDLVC e ARVC."
+  };
+
+  function intervalloTesto(s, iv) {
+    if (iv.tipo === "arvc") return "Ogni <b>1–2 anni</b> ECG, eco e Holter, adattando la valutazione al rischio di complicanze della famiglia; la <b>CMR</b> si considera alla prima valutazione" + E("§ 7.4.2, p. 3570") + ".";
+    if (iv.tipo === "prima") return "Ogni <b>1–3 anni</b> ECG ed eco, più altri esami dove servono, fino ai 60 anni; poi ogni <b>3–5 anni</b>" + E("p. 3547") + ".";
+    return "Ogni <b>3–5 anni</b> ECG ed eco, più altri esami dove servono: dopo i 60 anni il ritmo si dirada" + E("p. 3547") + ".";
+  }
+
+  function disegna() {
+    var s = S(), i;
+    // campi che compaiono solo quando contano
+    el("rigaGene").className = (s.fen === "dcm" && s.test === "plp") ? "riga" : "riga hide";
+    el("rigaInform").className = (s.test && s.test !== "plp" && s.altri === "no") ? "riga" : "riga hide";
+    el("rigaChi").className = s.grado === "1" ? "riga" : "riga hide";
+    el("rigaPonte").className = s.grado === "2" ? "riga" : "riga hide";
+    el("rigaCasc").className = (s.test === "plp" && !(s.grado === "2" && s.ponte === "nonportatore")) ? "riga" : "riga hide";
+    var ve = "—";
+    if (s.eta !== null) ve = !etaOk(s.eta) ? "fuori scala: ignorata" : (ped(s.eta) ? "età pediatrica (sotto i " + ADULTO + " anni)" : "adulto");
+    el("vEta").innerHTML = ve;
+    el("notaFenp").innerHTML = s.fen ? "Come si legge il fenotipo nel parente — " + FENP[s.fen] : "Scegli il fenotipo del probando: per HCM, DCM, NDLVC e ARVC la fonte dice come si legge il fenotipo nel parente.";
+
+    var m = manca(s), r = ramo(s), tg = testGen(s), sc = screen(s), fn = fine(s), h, v;
+
+    /* (a) · il percorso della Fig. 11 */
+    h = "<h3>Il percorso — Fig. 11, p. 3547</h3>";
+    v = percorso(s);
+    if (!v.length) h += '<div class="esito">' + chip("kx", "—") + '<span class="muted">serve l\'esito del test genetico nel probando (passo 1)</span></div>';
+    else {
+      h += '<div class="via">';
+      for (i = 0; i < v.length; i++) h += (i ? '<span class="fr">→</span>' : "") + '<span class="nodo' + (i === v.length - 1 ? " ultimo" : "") + '">' + v[i] + "</span>";
+      h += "</div>";
+      if (m) h += '<div class="muted" style="font-size:13px">Per il resto del percorso ' + m + ".</div>";
+    }
+    el("outPercorso").innerHTML = h;
+
+    /* (b) · il test genetico nel parente */
+    h = "<h3>Il test genetico nel parente — Rec. Table 8, p. 3537</h3>";
+    if (tg.perche) h += '<div class="esito">' + chip("kx", "—") + '<span class="muted">' + tg.perche + "</span></div>";
+    else {
+      if (tg.voce === "cascata") {
+        h += '<div class="esito"><span class="big">Test a cascata, con consulenza prima e dopo</span>' + pillE(tg.classe) + "</div>";
+        if (ped(s.eta)) h += passo("In <b>età pediatrica</b> il test a cascata <b>si considera</b> (IIa B, non I): si pesano la cardiomiopatia, l'età attesa di esordio, come si è presentata in famiglia e le conseguenze cliniche e legali" + E("Rec. Table 8, p. 3537") + ". Decide la famiglia, dopo la consulenza: se lo rifiuta, lo screening clinico continua, perché il rischio resta" + E("Fig. 9, p. 3535") + ". Il test nel parente sano può essere indicato a ogni età, anche nei bambini molto piccoli" + E("p. 3529") + ".", "att", "→");
+        else h += passo("Al parente <b>adulto</b> a rischio, con una variante P/LP certa in famiglia, il test a cascata si <b>offre</b>, con la consulenza prima e dopo" + E("Rec. Table 8, p. 3537") + ".", "att", "→");
+        if (s.grado === "1") h += passo("La cascata comincia dai parenti di primo grado, se disponibili, e si allarga per gradi" + E("Rec. Table 8, p. 3537") + "; prosegue in tutti i figli dei parenti che portano la variante" + pgs("ESC 2023 supplementare, § 2.2.5, p. 5") + ".");
+        else if (s.ponte === "morto") h += passo("Il parente di primo grado che li collega è <b>morto</b>: si valutano i suoi parenti stretti, cioè i parenti di secondo grado del probando — valutazione clinica " + pillE(R.sec) + " — e la cascata genetica si allarga a loro" + E("Rec. Table 8, p. 3537") + ".");
+        else if (s.ponte === "portatore") h += passo("Il parente di primo grado che li collega <b>porta la variante</b>: la cascata si allarga per gradi" + E("Rec. Table 8, p. 3537") + ", e prosegue in tutti i figli dei portatori" + pgs("ESC 2023 supplementare, § 2.2.5, p. 5") + ".");
+        else h += passo("Il parente di primo grado che li collega <b>non è stato testato</b>: la cascata parte dai parenti di primo grado <b>se disponibili</b>, e poi si allarga" + E("Rec. Table 8, p. 3537") + ". Se lui può farlo, il suo esito dice se questo ramo è a rischio.");
+        if (s.casc === "pos") h += passo("Fatto: il parente <b>porta la variante</b> di famiglia.", "", "✓");
+        if (s.casc === "neg") h += passo("Fatto: il parente <b>non porta</b> la variante di famiglia.", "", "✓");
+        if (s.casc === "rifiuta") h += passo("Il test è stato <b>rifiutato</b>: si può riproporre, ma lo screening clinico intanto continua" + E("Fig. 9, p. 3535") + ".", "", "!");
+      } else if (tg.voce === "fuori") {
+        h += '<div class="esito"><span class="big">Fuori dalla cascata</span></div>';
+        h += nota("", SINT + "Il parente di primo grado da cui passa la parentela <b>non porta</b> la variante: la cascata si allarga dai portatori" + E("Rec. Table 8, p. 3537") + pgs("supplementare, p. 5") + ", e su questo ramo si ferma. La fonte non scrive questo caso: è la lettura dello strumento. Se compaiono sintomi, o se in famiglia emergono dati nuovi, si torna a valutare.");
+      } else if (tg.voce === "segregazione") {
+        h += '<div class="esito"><span class="big">Segregazione della VUS</span>' + pillE(tg.classe) + "</div>";
+        h += passo("Si cerca la VUS di famiglia " + (tg.malato ? "nel parente <b>malato</b>" : "nel <b>genitore</b>") + " per vedere se segue la malattia, quando può rendere certa l'interpretazione della variante" + E("Rec. Table 8, p. 3537") + ". Va detto con chiarezza che <b>non è un test diagnostico</b> per chi lo fa" + E("p. 3529") + ". Una variante assente in entrambi i genitori è nata de novo, e questo pesa verso la patogenicità" + pgs("ESC 2023 supplementare, p. 4") + ".", "att", "→");
+        h += passo("Se la VUS diventa P/LP, si passa al ramo P/LP e alla cascata; finché resta VUS, il parente segue lo screening clinico" + E("Fig. 11, p. 3547") + ".");
+      } else if (tg.voce === "paziente") {
+        h += '<div class="esito"><span class="big">Il parente è un paziente</span></div>';
+        h += passo("Ha una cardiomiopatia: per il test valgono le righe del <b>paziente</b> — test genetico quando serve a diagnosi, prognosi, terapia o scelte riproduttive, o apre la cascata " + pillE(R.prob) + ".", "att", "→");
+      } else if (tg.voce === "dubbio") {
+        h += '<div class="esito"><span class="big">Da decidere nel team</span></div>';
+        h += nota("", SINT + "Con anomalie non diagnostiche il parente non è né malato né «senza fenotipo», che è la condizione della riga III C. La fonte non scrive il caso: la scelta sul test spetta al team cardiogenetico. Nel fenotipo borderline del paziente il test si considera solo dopo una valutazione specialistica dettagliata " + pillE({ c:"IIb", l:"C", p:"Rec. Table 8, p. 3537" }) + ".");
+      } else {
+        h += '<div class="esito"><span class="big">Nessun test diagnostico nel parente</span>' + pillE(tg.classe) + "</div>";
+        if (s.test === "vus") h += passo("Con una <b>VUS</b> nel probando il test a cascata <b>non è indicato</b>" + E("p. 3529") + ", e il test diagnostico nel parente senza fenotipo non è raccomandato " + pillE(R.noTest) + ". La VUS si cerca nei genitori e nei parenti malati " + pillE(R.segr) + ".", "att", "→");
+        else h += passo("Senza una variante P/LP in famiglia il test diagnostico nel parente senza fenotipo <b>non è raccomandato</b> " + pillE(R.noTest) + ".", "att", "→");
+      }
+      if (s.test === "neg") h += passo("Un test negativo nel probando dice solo che nei geni noti non c'è una variante causale: non che la malattia non sia genetica" + E("p. 3534") + ".");
+      if (s.test === "nonfatto") h += passo("Il test <b>nel probando</b> è raccomandato quando serve alla sua gestione o apre la cascata a parenti che altrimenti resterebbero in sorveglianza per anni " + pillE(R.prob) + "; nel deceduto con cardiomiopatia trovata all'autopsia, se aiuta i parenti vivi " + pillE(R.autop) + ".", "att", "!");
+      if (s.ered === "poli" && s.test === "plp") h += passo("<b>Più di una variante P/LP</b> in famiglia: il follow-up si discute nel team cardiomiopatie" + E("p. 3548") + ".", "", "!");
+      h += passo("Consulenza genetica alla famiglia, anche se il test non si fa " + pillE(R.couns) + "; test e consulenza dentro un team multidisciplinare esperto " + pillE({ c:"I", l:"B", p:"Rec. Table 8, p. 3537" }) + ".");
+    }
+    el("outTest").innerHTML = h;
+
+    /* (c) · lo screening clinico */
+    h = "<h3>Lo screening clinico — che cosa, e ogni quanto</h3>";
+    if (sc.perche) h += '<div class="esito">' + chip("kx", "—") + '<span class="muted">' + sc.perche + "</span></div>";
+    else {
+      var st = sc.stato;
+      if (st === "portatore") {
+        h += '<div class="esito"><span class="big">Portatore: follow-up a lungo termine</span>' + pillE(R.port) + "</div>";
+        h += passo("Valutazione <b>multiparametrica con ECG e imaging</b>, e poi follow-up a lungo termine" + (s.grado === "2" ? " (la riga è scritta per i parenti di primo grado; la cascata la estende per gradi)" : "") + " " + pillE(R.port) + ". Con l'ECG e l'imaging multimodale, gli esami aggiuntivi che servono — per esempio l'Holter — secondo età, fenotipo e genotipo della famiglia" + E("§ 6.11, p. 3546") + ".", "att", "→");
+        h += passo("<b>Ritmo.</b> " + intervalloTesto(s, sc.iv));
+        if (s.fenp !== "dubbio") h += passo("<b>CMR con contrasto</b> nel portatore senza fenotipo, per la diagnosi e per cogliere la malattia presto " + pillE(R.cmrP) + ".");
+        if (s.fenp === "nonval") h += passo("Il fenotipo <b>non è ancora stato valutato</b>: la prima visita con ECG e imaging è il passo di adesso.", "", "!");
+        if (s.fenp === "dubbio") h += passo("<b>Anomalie non diagnostiche</b> in un portatore: possono essere l'espressione precoce e lieve della malattia" + E("p. 3520") + ". " + FENP[s.fen] + " La CMR con contrasto nel portatore " + pillE(R.cmrP) + " aiuta a decidere.", "", "!");
+        if (sc.rimandaX) h += passo("<b>Legata all'X, donna eterozigote</b>: la valutazione cardiaca si può rimandare, perché il fenotipo può comparire più tardi" + E("pp. 3547–3548") + ".", "", "!");
+        if (s.fen === "dcm" && dentro(GENI_COND, s.gene)) h += passo("<b>DCM da " + s.gene + "</b>: valutazione più dettagliata della conduzione e delle aritmie, che possono essere la prima espressione della malattia" + E("p. 3564") + ".", "", "!");
+        if (s.fen === "dcm" && dentro(GENI_CMR, s.gene)) h += passo("<b>DCM da " + s.gene + "</b>, gene a rischio di morte improvvisa: la <b>CMR</b> si considera anche con funzione cardiaca normale" + E("p. 3564") + ".", "", "!");
+        if (s.fen === "ndlvc") h += passo("<b>NDLVC</b>: conta soprattutto la ricerca di disturbi di conduzione e di aritmie atriali e ventricolari, spesso i primi segni" + E("p. 3567") + ".");
+      } else if (st === "ignoto") {
+        h += '<div class="esito"><span class="big">Stato della variante non noto: lo screening continua</span></div>';
+        h += passo("Il test a cascata " + (s.casc === "rifiuta" ? "è stato rifiutato" : "non è ancora stato fatto") + ": il parente resta <b>a rischio</b>, e lo screening clinico con ECG e imaging continua" + E("Fig. 9, p. 3535") + ". Intanto il test si può offrire: " + pillE(ped(s.eta) ? R.cascP : R.cascA) + ".", "att", "→");
+        h += passo("<b>Ritmo.</b> " + intervalloTesto(s, sc.iv) + " " + SINT + "La fonte dà questo ritmo ai portatori e a chi ha una malattia familiare dimostrata; chi non ha fatto il test può essere portatore, e lo strumento lo applica per prudenza.");
+        if (s.fen === "ndlvc") h += passo("<b>NDLVC</b>: conta soprattutto la ricerca di disturbi di conduzione e di aritmie" + E("p. 3567") + ".");
+      } else if (st === "dimissione") {
+        h += '<div class="esito"><span class="big">Dimissione</span>' + pillE(R.dimis) + "</div>";
+        h += passo("Non porta la variante di famiglia e non ha un fenotipo: si <b>dimette</b> dal follow-up, con l'invito a tornare se compaiono sintomi o se in famiglia emergono dati clinici nuovi " + pillE(R.dimis) + ".", "att", "→");
+        if (s.grado === "2") h += passo("La riga è scritta per i parenti di primo grado; il testo la dice per chiunque non porti la variante di famiglia: di solito si dimette" + E("p. 3529") + ".");
+      } else if (st === "valuta") {
+        h += '<div class="esito"><span class="big">Prima ECG e imaging, poi dimissione</span></div>';
+        h += passo("La cascata è <b>clinica e genetica</b>" + E("Fig. 11, p. 3547") + ": il parente non porta la variante, ma il fenotipo non è ancora stato visto. Se ECG e imaging sono normali, dimissione " + pillE(R.dimis) + ".", "att", "→");
+      } else if (st === "team") {
+        h += '<div class="esito"><span class="big">Da decidere nel team</span></div>';
+        h += nota("", SINT + "Non porta la variante ma ha anomalie non diagnostiche. La dimissione " + pillE(R.dimis) + " vale per chi è <b>senza fenotipo</b>: questo non lo è con certezza, e la fonte non scrive il caso. " + FENP[s.fen]);
+      } else if (st === "eteroAR") {
+        h += '<div class="esito"><span class="big">Eterozigote di una forma recessiva: si può dimettere</span></div>';
+        h += passo("Con un'ereditarietà <b>autosomica recessiva certa</b>, l'eterozigote si può dimettere" + E("§ 6.11.1, p. 3547") + ".", "att", "→");
+        h += passo(SINT + "Se il parente porta <b>entrambe</b> le varianti del probando non è un eterozigote: si segue come portatore " + pillE(R.port) + ".");
+      } else if (st === "paziente") {
+        h += '<div class="esito"><span class="big">Ha una cardiomiopatia: si segue come paziente</span>' + pillE(R.paz) + "</div>";
+        h += passo("Follow-up del paziente stabile con <b>ECG ed eco ogni 1–2 anni</b> " + pillE(R.paz) + "; la Fig. 11 lo manda al follow-up a lungo termine (Classe I)" + E("p. 3547") + ". Da qui valgono le schede del suo fenotipo.", "att", "→");
+        if (r === "plp_neg") h += nota("", SINT + "Non porta la variante di famiglia ma ha una cardiomiopatia: la dimissione della Rec. Table 14 vale solo senza fenotipo. La discordanza fra genotipo e fenotipo si discute nel team (fenocopia, seconda causa).");
+        if (r === "noplp") h += passo("Ora in famiglia c'è <b>più di un malato</b>: per gli altri parenti la malattia familiare è dimostrata, e il loro ritmo è quello di p. 3547.");
+      } else if (st === "fuori") {
+        h += '<div class="esito"><span class="big">Nessun controllo previsto su questo ramo</span></div>';
+        h += nota("", SINT + "Il parente discende da un non portatore: la fonte non scrive il caso. Lo strumento non prevede controlli; con sintomi o dati nuovi in famiglia si torna a valutare.");
+      } else if (st === "nonprevisto") {
+        h += '<div class="esito"><span class="big">La fonte non lo prevede</span></div>';
+        h += passo("Senza una variante P/LP la fonte raccomanda lo screening clinico dei <b>parenti di primo grado</b> " + pillE(R.iniz) + "; quello dei parenti di secondo grado solo quando il parente di primo grado che li collega è <b>morto</b> " + pillE(R.sec) + ". Qui non c'è una raccomandazione, e lo strumento non ne inventa una.", "att", "→");
+      } else {
+        // senza P/LP nel probando
+        h += '<div class="esito"><span class="big">Screening clinico senza variante nota</span>' + pillE(R.iniz) + "</div>";
+        if (s.grado === "2") h += passo("Il parente di primo grado che li collega è <b>morto</b>: valutazione clinica dei suoi parenti stretti, cioè i parenti di secondo grado del probando " + pillE(R.sec) + ".", "att", "→");
+        if (!s.fenp || s.fenp === "nonval") h += passo("<b>Adesso</b>: prima valutazione multiparametrica con ECG e imaging " + pillE(R.iniz) + ".", "att", "→");
+        h += passo((!s.fenp || s.fenp === "nonval" ? "Poi <b>controlli regolari a lungo termine</b>" : "<b>Controlli regolari a lungo termine</b>") + " con ECG e imaging " + pillE(R.regol) + (s.fenp === "normale" ? "; con il cuore normale la Fig. 11 dice screening ripetuto a intervalli regolari (Classe IIa), e si torna allo screening a cascata" + E("p. 3547") : "") + ".");
+        if (sc.iv) h += passo("<b>Ritmo.</b> " + intervalloTesto(s, sc.iv) + (sc.familiare ? " È il ritmo della malattia familiare dimostrata." : "") + (sc.dcm ? " Nella <b>DCM</b>, anche se nessun altro familiare oltre al probando è malato, i parenti di primo grado seguono gli stessi intervalli per età del § 6.11" + E("p. 3564") + "." : ""));
+        else if (sc.isolata) h += passo("<b>Ritmo.</b> Un solo malato in famiglia: la fonte non dà un intervallo in anni. Nel <b>bambino</b> la sorveglianza continua, per la penetranza legata all'età; nell'<b>adulto</b> dipende dalla storia familiare e da altri fattori" + E("§ 6.11, p. 3546") + (s.test === "vus" ? "." : "; con un solo malato e nessuna variante identificata, frequenza e durata dei controlli <b>si possono ridurre</b>" + E("p. 3546") + "."));
+        else h += passo("<b>Ritmo.</b> Se altri parenti sono malati (malattia familiare dimostrata): ECG ed eco ogni 1–3 anni fino ai 60, poi ogni 3–5" + E("p. 3547") + ". Se il probando è l'unico malato, la fonte non dà un intervallo in anni: «regolari», riducibili" + E("p. 3546") + ".");
+        if (s.fenp !== "cmp" && s.altri !== "no") h += passo((sc.familiare ? "La cardiomiopatia è familiare e senza diagnosi genetica: <b>CMR con contrasto</b> considerabile nei familiari senza fenotipo " : "Se la cardiomiopatia è familiare e senza diagnosi genetica, <b>CMR con contrasto</b> considerabile nei familiari senza fenotipo ") + pillE(R.cmrF) + ".");
+        if (s.fenp === "dubbio") h += passo("<b>Anomalie non diagnostiche</b>: possono essere l'espressione precoce e lieve della malattia" + E("p. 3520") + ". " + FENP[s.fen], "", "!");
+        if (s.fen === "ndlvc") h += passo("<b>NDLVC</b>: valutazione a lungo termine dei parenti di primo grado, per precauzione; conta soprattutto la ricerca di disturbi di conduzione e di aritmie" + E("p. 3567") + ".");
+      }
+      if (s.sesso === "f" && (st === "portatore" || st === "ignoto" || st === "noplp")) h += passo("<b>Donna</b>: la penetranza arriva in media <b>10 anni dopo</b> rispetto all'uomo" + E("p. 3547") + ". Un cuore normale a 40 anni dice meno che in un uomo.");
+      if (s.grado === "2" && s.ponte === "morto") h += passo("Se il parente è morto <b>improvvisamente e prematuramente</b>, il supporto psicologico si offre a chi lo ha perso " + pillE(R.lutto) + ".");
+    }
+    el("outScreen").innerHTML = h;
+
+    /* (d) · quando smettere */
+    h = "<h3>Quando smettere — § 6.11.1, p. 3547</h3>";
+    if (fn.perche) h += '<div class="esito">' + chip("kx", "—") + '<span class="muted">' + fn.perche + "</span></div>";
+    else {
+      h += '<div class="esito"><span class="big">' + fn.bar.charAt(0).toUpperCase() + fn.bar.slice(1) + "</span></div>";
+      if (fn.tipo === "mai") h += passo("Lo screening dei portatori va <b>dall'infanzia alla vecchiaia</b>" + E("p. 3547") + ". Lo stop dai 50 anni vale solo per la forma isolata, senza variante.", "att", "→");
+      else if (fn.tipo === "subito") h += passo("Dimissione adesso, con l'invito a tornare " + pillE(R.dimis) + ".", "att", "→");
+      else if (fn.tipo === "dopoval") h += passo("Dopo ECG e imaging normali: dimissione " + pillE(R.dimis) + ".", "att", "→");
+      else if (fn.tipo === "ar") h += passo("Eterozigote di una forma recessiva certa: si può dimettere" + E("p. 3547") + ".", "att", "→");
+      else if (fn.tipo === "ignoto") h += passo("Lo decide il test a cascata: se il parente non porta la variante e non ha fenotipo, dimissione " + pillE(R.dimis) + "; se la porta, controlli per tutta la vita" + E("p. 3547") + ".", "att", "→");
+      else if (fn.tipo === "paziente") h += passo("È un paziente: il follow-up non ha una fine " + pillE(R.paz) + ".", "att", "→");
+      else if (fn.tipo === "team") h += passo(SINT + "La fonte non scrive il caso: lo decide il team.", "att", "→");
+      else if (fn.tipo === "nonsi") h += passo("Non si applica: su questo ramo non sono previsti controlli.", "att", "→");
+      else {
+        if (fn.tipo === "stop") h += passo("La forma è <b>isolata</b> e le condizioni ci sono tutte: la fine dei controlli periodici <b>si può considerare</b>" + E("§ 6.11.1, p. 3547") + "; la Fig. 11 lo dice nella nota a" + E("p. 3547") + (s.fen === "dcm" ? ", e la sezione della DCM lo ripete" + E("p. 3564") : "") + ".", "att", "→");
+        else if (fn.tipo === "stopdopo") h += passo("Le condizioni della forma isolata ci sono; manca l'età: lo stop si può considerare fra <b>" + fn.anni + " " + (fn.anni === 1 ? "anno" : "anni") + "</b>, se gli esami restano normali" + E("§ 6.11.1, p. 3547") + ".", "att", "→");
+        else h += passo("Nessuno stop previsto: i controlli regolari continuano" + E("Rec. Table 14, p. 3546") + ". Lo stop della forma isolata chiede tutte queste condizioni" + E("§ 6.11.1, p. 3547") + ":", "att", "→");
+        for (i = 0; i < fn.cond.length; i++) h += '<div class="passo' + (fn.cond[i].ok ? "" : " esc") + '"><span class="ico">' + (fn.cond[i].ok ? "✓" : "✗") + '</span><span class="tx">' + fn.cond[i].t + "</span></div>";
+        if (s.test === "nonfatto") h += nota("info", "Il test <b>non fatto</b> non vale come test negativo: lo stop chiede lo studio completo del probando, «test genetico negativo compreso»" + E("p. 3547") + ".");
+        if (s.test === "vus") h += nota("info", "Una <b>VUS</b> non è un test negativo: finché non si chiarisce, lo stop della forma isolata non si applica" + E("p. 3547") + ".");
+        if (ped(s.eta)) h += nota("info", "Nel <b>bambino</b> senza variante nota la sorveglianza continua, per la penetranza legata all'età" + E("p. 3546") + ".");
+      }
+    }
+    el("outFine").innerHTML = h;
+
+    /* (e) · confronto con altre linee guida, nel loro sistema di classi */
+    function inc(tocca, x) { return nota(tocca ? "" : "spenta", (tocca ? "<b>Tocca questo caso.</b> " : "") + x); }
+    h = "";
+    if (s.fen === "hcm") {
+      var t7 = ahaTab7(s);
+      h += nota("info", CONF + "<b>AHA/ACC 2024, HCM</b> — nei parenti di primo grado si offrono lo screening clinico (ECG ed eco 2D) e, con una P/LP nel probando, il test a cascata " + pillA(AHA.n6) + ".");
+      if (t7 && (sc.stato === "portatore" || sc.stato === "ignoto" || sc.stato === "noplp")) h += nota("info", CONF + "<b>AHA/ACC 2024, Tab. 7</b>" + pgs("p. e1252") + " — per questo parente (" + t7.riga + "): inizio " + t7.inizio + ", ECG ed eco <b>ogni " + t7.ogni + " anni</b>" + (t7.precoce ? " (ogni 1–2 anni se in famiglia l'esordio è precoce)" : "") + (s.grado === "2" ? " (la Tab. 7 è scritta per i parenti di primo grado)" : "") + ". Nel portatore senza fenotipo: ogni 1–2 anni in bambini e adolescenti, ogni 3–5 negli adulti " + pillA(AHA.gpn) + ". La ESC 2023 dà invece ogni 1–3 anni fino ai 60 e ogni 3–5 dopo" + E("p. 3547") + ": nel giovane adulto la AHA allunga l'intervallo.");
+      if (r === "plp_neg") h += nota("info", CONF + "<b>AHA/ACC 2024</b> — nel parente con genotipo negativo, in una famiglia con genotipo positivo, lo screening clinico continuato non è indicato, a meno che la variante non venga declassata " + pillA(AHA.n13) + ". La ESC 2023 lo dimette " + pillE(R.dimis) + ": stessa sostanza.");
+      if (s.test === "vus") h += nota("info", CONF + "<b>AHA/ACC 2024</b> — con una VUS, l'utilità del test nei parenti <b>senza fenotipo</b> per riclassificarla è incerta " + pillA(AHA.n11) + ". La ESC 2023 considera il test nei genitori e nei parenti <b>malati</b> " + pillE(R.segr) + ": guardano a persone diverse, non si contraddicono.");
+      if (s.test === "neg") h += nota("info", CONF + "<b>AHA/ACC 2024</b> — se il probando ha solo varianti benigne o probabilmente benigne, il test a cascata nella famiglia non serve " + pillA(AHA.n12) + ".");
+      if (sc.stato === "portatore" || sc.stato === "noplp" || sc.stato === "ignoto") h += nota("info", CONF + "<b>AHA/ACC 2024</b>, testo e non raccomandazione — la frequenza dei controlli si può ridurre dopo i 18 anni, quando la penetranza cala, e di solito si continua fino a circa 50 anni" + pgs("AHA/ACC 2024, p. e1264") + ". La ESC 2023 segue i portatori per tutta la vita e chiude a 50 anni solo la forma isolata" + E("p. 3547") + ".");
+      h += nota("info", CONF + "<b>AHA/ACC 2024</b>, testo e non raccomandazione — nel familiare di un paziente con HCM, o con una variante P/LP, uno spessore di <b>13–14 mm</b> può bastare per la diagnosi; nel bambino uno z-score <b>&gt;2,5</b> se asintomatico e senza familiarità, <b>&gt;2</b> con familiarità certa o test genetico positivo" + pgs("AHA/ACC 2024, p. e1247") + ". La ESC 2023 usa ≥13 mm nel parente adulto di primo grado e z-score &gt;2 in ogni bambino" + E("p. 3549") + ".");
+      h += nota("info", CONF + "<b>ESC 2022, aritmie ventricolari</b> — nel parente di primo grado di un paziente con HCM, ECG ed eco " + pill22(E22.hcm) + ". Nelle cardiomiopatie vale la 2023.");
+    }
+    if (s.fen === "dcm") h += nota("info", CONF + "<b>ESC 2022, aritmie ventricolari</b> — nel parente di primo grado di una DCM, ECG ed eco " + pill22(E22.dcm1) + " solo se il caso indice ha avuto la diagnosi prima dei 50 anni o ha tratti di malattia ereditaria, o se in famiglia ci sono DCM o morti improvvise premature; con una DCM apparentemente sporadica " + pill22(E22.dcm2b) + ". La 2023 non distingue: senza P/LP nel probando, la prima valutazione è " + pillE(R.iniz) + " in tutti i parenti di primo grado.");
+    if (s.test === "plp") h += nota("info", CONF + "<b>ESC 2022, aritmie ventricolari</b> — con una variante di classe IV o V, test genetico ai parenti di primo grado, a quelli con sintomi e ai portatori obbligati " + pill22(E22.casc) + ", senza distinguere l'età: la 2023 lo tiene I B nell'adulto e lo porta a IIa B nel bambino" + E("Rec. Table 8, p. 3537") + ". Nelle cardiomiopatie vale la 2023.");
+    if (s.test === "vus") h += nota("info", CONF + "<b>ESC 2022, aritmie ventricolari</b> — le varianti di classe III (VUS) e IV si studiano per la segregazione nella famiglia dove si può, e si rivalutano periodicamente " + pill22(E22.segr) + "; la 2023 dà la segregazione della VUS " + pillE(R.segr) + ".");
+    if (s.test === "nonfatto") h += nota("info", CONF + "<b>ESC 2022, aritmie ventricolari</b> — niente test genetico nel paziente indice con prove insufficienti di una malattia genetica " + pill22(E22.noidx) + "; la 2023, davanti a un fenotipo borderline, lo ammette dopo una valutazione specialistica " + pillE({ c:"IIb", l:"C", p:"Rec. Table 8, p. 3537" }) + ".");
+    if (s.fen) h += nota("info", CONF + "<b>ESC 2022, aritmie ventricolari</b> — test e consulenza in un team multidisciplinare esperto " + pill22(E22.team) + "; nella 2023 " + pillE({ c:"I", l:"B", p:"Rec. Table 8, p. 3537" }) + ".");
+    el("outConf").innerHTML = h || '<span class="muted">Si accende con il fenotipo e il test del probando: la AHA/ACC 2024 per la HCM, la ESC 2022 sulle aritmie ventricolari per tutti.</span>';
+
+    /* (f) · incoerenze e ambiguità della fonte */
+    h = inc(s.test === "plp" && s.eta !== null && etaOk(s.eta) && ped(s.eta), "<b>La classe della cascata.</b> La Fig. 11 dà «Classe I» al test a cascata senza distinguere l'età" + E("p. 3547") + "; la Rec. Table 8 dà I B nell'adulto e IIa B nel bambino" + E("p. 3537") + ". Lo strumento usa la tabella.");
+    h += inc(r === "noplp" && s.fenp === "cmp", "<b>Il follow-up del parente malato.</b> Nel ramo senza variante la Fig. 11 dà «Classe I» al follow-up del parente con cardiomiopatia" + E("p. 3547") + ", ma la Rec. Table 14 non ha questa riga: la classe corrisponde al follow-up di ogni paziente, I C" + E("Rec. Table 13, p. 3546") + ".");
+    h += inc(s.grado === "2", "<b>Il secondo grado non è nella figura.</b> La valutazione dei parenti di secondo grado quando quello di primo grado è morto (IIa C) sta nella Rec. Table 14" + E("p. 3546") + " e nel testo" + E("p. 3529") + ", non nella Fig. 11.");
+    h += inc(s.test === "vus", "<b>Il ramo della VUS.</b> Nella Fig. 11 dalla segregazione partono due frecce, verso la cascata clinica e genetica e verso lo screening clinico" + E("p. 3547") + ": la figura non dice quando si prende l'una o l'altra. Lo strumento legge: P/LP se la VUS si chiarisce, altrimenti screening clinico.");
+    h += inc(sc.iv && sc.iv.tipo !== "arvc", "<b>Gli intervalli in anni non hanno classe.</b> «Ogni 1–3 anni prima dei 60, poi ogni 3–5» è una frequenza «proposta» nel testo" + E("p. 3547") + "; le righe della Rec. Table 14 dicono «a lungo termine» e «regolari», senza anni" + E("p. 3546") + ".");
+    h += inc(!!sc.dcm && s.altri === "no", "<b>DCM con un solo malato: due regole.</b> Il § 6.11, per tutte le cardiomiopatie, dice che con un solo malato e nessuna variante identificata frequenza e durata dei controlli si possono ridurre" + E("p. 3546") + "; la sezione della DCM dice che, se nessun altro familiare oltre al probando ha una DCM, i parenti di primo grado seguono gli stessi intervalli per età" + E("p. 3564") + ". Lo strumento usa la regola specifica, come per la ARVC.");
+    h += inc(s.fen === "arvc", "<b>ARVC: due ritmi.</b> La sezione della ARVC dice ogni 1–2 anni ECG, eco e Holter" + E("p. 3570") + "; il § 6.11, per tutte le cardiomiopatie, ogni 1–3 anni" + E("p. 3547") + ". Lo strumento usa la regola specifica.");
+    h += inc(s.fen === "dcm" && s.gene === "RBM20", "<b>«RMB20».</b> Nell'elenco dei geni per cui considerare la CMR la fonte scrive «RMB20»" + E("p. 3564") + ": è RBM20, il gene della Tab. 10.");
+    h += inc(s.fen === "dcm", "<b>La DCM nel parente.</b> La fonte dice che «una dilatazione isolata del VS con funzione sistolica conservata, o in presenza di una variante causale familiare» basta per la diagnosi nel parente" + E("p. 3562") + ": la frase non chiarisce se la variante basti da sola o accompagni la dilatazione.");
+    h += inc(sc.isolata && s.test === "nonfatto", "<b>«Nessuna variante identificata».</b> Con un solo malato e nessuna variante identificata frequenza e durata si possono ridurre" + E("p. 3546") + "; con il test non fatto nessuna variante è stata cercata, e la fonte non dice se la riduzione valga anche lì. Lo stop dei 50 anni, invece, chiede un test negativo" + E("p. 3547") + ".");
+    el("outInc").innerHTML = h;
+
+    /* (g) · limiti per questo parente */
+    var lim = [];
+    lim.push("L'<b>età d'inizio</b> non è in anni: per i portatori e la malattia familiare la fonte dice «dall'infanzia alla vecchiaia»" + E("p. 3547") + ". Lo strumento non calcola un'età di partenza.");
+    lim.push("Il confine fra <b>età pediatrica e adulta</b> la fonte non lo fissa: lo strumento usa i " + ADULTO + " anni, e da lì cambia la classe della cascata (IIa B sotto, I B sopra). È una convenzione dello strumento.");
+    lim.push("Gli intervalli in anni valgono per i <b>portatori</b> e per la <b>malattia familiare dimostrata</b>" + E("p. 3547") + ", e, per le sezioni del fenotipo, per i parenti nella <b>DCM</b>" + E("p. 3564") + " e nella <b>ARVC</b>" + E("p. 3570") + "; nelle altre situazioni la fonte dice «regolari»" + E("p. 3546") + ".");
+    lim.push("I numeri valgono per le <b>famiglie con cardiomiopatia</b>: la stessa variante trovata fuori da questo contesto (reperto secondario, screening di popolazione) ha probabilmente una penetranza molto più bassa" + E("p. 3547") + ".");
+    lim.push("Lo strumento <b>non stabilisce il fenotipo</b>: lo dicono la visita, l'ECG e l'imaging, con i criteri del parente dove la fonte li dà. Non sostituisce la consulenza genetica, che si offre a ogni famiglia " + pillE(R.couns) + ".");
+    if (ped(s.eta === null ? 99 : s.eta)) lim.push("<b>Età pediatrica</b>: la fonte tratta bambino e adulto come la stessa malattia" + E("p. 3537") + "; la consulenza del bambino e la scelta con la famiglia sono nella Fig. 9" + E("p. 3535") + ". Per la cardiologia pediatrica c'è il progetto Distillati-cardio-pediatria.");
+    lim.push("Supporto psicologico: si offre a chi ha perso un familiare con cardiomiopatia per morte improvvisa prematura " + pillE(R.lutto) + ", e si considera in tutte le famiglie con cardiomiopatia ereditaria " + pillE({ c:"IIa", l:"C", p:"Rec. Table 15, p. 3549" }) + ".");
+    lim.push("Nessuna dose: lo strumento dice chi testare e chi controllare, non come trattare.");
+    el("limiti").innerHTML = "<li>" + lim.join("</li><li>") + "</li>";
+
+    function bar(id, k, x) { var b = el(id); b.className = "cat " + k; b.innerHTML = x; }
+    bar("barTest", tg.k, tg.bar);
+    bar("barCtrl", sc.k, sc.bar);
+    bar("barFine", fn.k, fn.bar);
+  }
+
+  document.addEventListener("input", disegna);
+  document.addEventListener("change", disegna);
+  el("azzera").addEventListener("click", function () {
+    var ins = document.querySelectorAll("input"), j;
+    for (j = 0; j < ins.length; j++) {
+      if (ins[j].type === "checkbox" || ins[j].type === "radio") ins[j].checked = false;
+      else ins[j].value = "";
+    }
+    el("gene").value = ""; el("ered").value = "ad";
+    disegna();
+    window.scrollTo(0, 0);
+  });
+
+  window.SCREENING_MOTORE = { manca:manca, ramo:ramo, testGen:testGen, screen:screen, fine:fine, percorso:percorso, intervallo:intervallo, ahaTab7:ahaTab7, ADULTO:ADULTO, SOGLIA_INT:SOGLIA_INT, STOP:STOP };
+  disegna();
+})();
+</script>
+<script data-iphone="web">
+// Solo da un indirizzo https, cioe' dalla pagina pubblicata: aperto come file
+// il tool non cerca ne' manifest ne' service worker, che accanto al file non
+// ci sono. Un errore qui non deve fermare niente: e' un di piu'.
+(function(){
+if(location.protocol!=="https:") return;
+try{
+  var t=document.getElementsByTagName("head")[0];
+  var m=document.createElement("link"); m.rel="manifest"; m.href="manifest.webmanifest";
+  var i=document.createElement("link"); i.rel="apple-touch-icon"; i.href="icona-180.png";
+  t.appendChild(m); t.appendChild(i);
+  if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js")["catch"](function(){});
+}catch(e){}
+})();
+</script>
+<script data-iphone="fine">document.documentElement.className+=" motore-ok";</script>
+</body>
+</html>
